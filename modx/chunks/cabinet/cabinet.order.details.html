@@ -1,0 +1,67 @@
+<!-- cabinet.order.details — Детали заказа (сниппет cabinetOrderDetails) -->
+<div class="fade-in">
+    <h1 class="h1">Заказ #{$order.num}</h1>
+
+    <div class="section-card">
+        <div class="h2">Информация о заказе</div>
+
+        <div class="order-detail-row">
+            <span class="order-detail-label">Дата оформления</span>
+            <span>{$order.createdon}</span>
+        </div>
+        <div class="order-detail-row">
+            <span class="order-detail-label">Статус</span>
+            <span class="status {if $order.status_id == 4}cancelled{elseif $order.status_id == 1}pending{/if}">{$order.status}</span>
+        </div>
+        <div class="order-detail-row">
+            <span class="order-detail-label">Способ доставки</span>
+            <span>{$order.delivery_name}</span>
+        </div>
+        <div class="order-detail-row">
+            <span class="order-detail-label">Способ оплаты</span>
+            <span>{$order.payment_name}</span>
+        </div>
+        <div class="order-detail-row">
+            <span class="order-detail-label">Итого</span>
+            <span style="font-size: 20px; font-weight: 900;">{$order.cost} {$order.currency}</span>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <div class="h2">Товары в заказе</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Кол-во</th>
+                    <th>Цена</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $order.products as $product}
+                <tr>
+                    <td>{$product.name}</td>
+                    <td>{$product.count}</td>
+                    <td>{$product.price} {$order.currency}</td>
+                    <td>{$product.cost} {$order.currency}</td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
+
+    {if $order.can_share}
+    <div class="section-card" style="text-align: center;">
+        <div class="h2">Поделиться заказом</div>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Отправьте ссылку для просмотра заказа</p>
+        <input type="text" value="{$order.share_url}" readonly onclick="this.select()" style="text-align: center; cursor: pointer;">
+    </div>
+    {/if}
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="[[~[[++cabinet_home_page_id]]]]orders/" class="btn" style="display: inline-block; width: auto; padding: 15px 40px;">
+            Назад к заказам
+        </a>
+    </div>
+</div>

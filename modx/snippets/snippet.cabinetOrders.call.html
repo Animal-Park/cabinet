@@ -1,0 +1,37 @@
+<!--
+    Вызов сниппета cabinetOrders
+    История заказов пользователя (интеграция с miniShop2).
+    Размещается в шаблоне tpl.cabinet.orders.
+-->
+
+[[!cabinetOrders?
+    &limit=`12`
+    &offset=`0`
+    &sortby=`createdon`
+    &sortdir=`DESC`
+    &tpl=`cabinet.orders`
+    &tplMessageWrapper=`cabinet.message.wrapper`
+    &css=``
+    &js=`[[++assets_url]]components/cabinet/js/web/orders.js`
+]]
+
+<!--
+    Параметры:
+    &statusAlias            — JSON с альтернативными ID статусов: {"6":1, "8":11}
+    &allowCancelStatuses    — ID статусов, для которых разрешена отмена (по умолчанию: 1)
+    &cancelledStatus        — ID статуса «Отменён клиентом» (по умолчанию: 4)
+    &excludeStatuses        — Скрытые статусы (по умолчанию: 5)
+    &criteriaAvailability   — JSON критерии доступности товара
+    &sharePageId            — ID страницы расшаренного заказа
+    &detailsPageId          — ID страницы деталей заказа
+    &thumbs                 — Превью-размеры: "120x90,360x240"
+    &currencySymbol         — Колонка валюты (symbol_right)
+    &limit                  — Лимит (12)
+    &offset                 — Смещение (0)
+    &sortby                 — Сортировка (createdon)
+    &sortdir                — Направление (DESC)
+    &tpl                    — Чанк (cabinet.orders)
+    &tplMessageWrapper      — Обёртка сообщений
+    &css                    — CSS (пустой)
+    &js                     — JS (orders.js из Cabinet)
+-->

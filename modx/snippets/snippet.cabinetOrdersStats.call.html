@@ -1,0 +1,25 @@
+<!--
+    Вызов сниппета cabinetOrdersStats
+    Статистика по заказам пользователя.
+    Можно вызывать на Dashboard и на странице заказов.
+-->
+
+[[!cabinetOrdersStats?
+    &activeStatuses=`1`
+    &cancelledStatuses=`4`
+    &completedStatuses=`2,3`
+    &tpl=`cabinet.orders.stats`
+    &css=``
+    &js=``
+]]
+
+<!--
+    Параметры:
+    &activeStatuses     — ID статусов активных заказов (по умолчанию: 1)
+    &cancelledStatuses  — ID статусов отменённых заказов (по умолчанию: 4)
+    &completedStatuses  — ID статусов завершённых заказов (по умолчанию: 2,3)
+    &currencySymbol     — Колонка валюты msMultiCurrency (symbol_right)
+    &tpl                — Чанк (cabinet.orders.stats)
+    &css                — CSS
+    &js                 — JS
+-->

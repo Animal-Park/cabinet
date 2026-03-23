@@ -1,0 +1,87 @@
+<!-- cabinet.profile — Форма редактирования профиля (сниппет cabinetProfile) -->
+<div class="fade-in">
+    <h1 class="h1">Профиль</h1>
+
+    <!-- Активные билеты -->
+    <div class="section-card">
+        <div class="h2">Мои активные билеты</div>
+        <div class="info-msg">Покажите QR-код сотруднику на входе или в зоне услуг.</div>
+        <!-- Билеты подтягиваются из miniShop2 или кастомной таблицы -->
+        [[!msProducts?
+            &parents=`0`
+            &where=`{"Data.user_id:=":"[[+modx.user.id]]", "Data.status:=":"active"}`
+            &tpl=`cabinet.ticket.row`
+            &limit=`10`
+        ]]
+    </div>
+
+    <!-- Персональные данные -->
+    <div class="section-card">
+        <div class="h2">Персональные данные</div>
+        <form method="post" action="" data-cabinet-form="profile" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="profile/update">
+            <input type="hidden" name="cabinet_csrf_token" value="{$csrf_token}">
+
+            <div class="avatar-wrap" style="margin: 0 auto 30px;">
+                <img src="{if $photo}{$photo}{else}{$gravatar}{/if}" alt="{$fullname}">
+                <label class="avatar-overlay" for="cabinet-avatar-input">Изменить</label>
+                <input type="file" name="photo" id="cabinet-avatar-input" accept="image/*" style="display:none;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div class="form-group">
+                    <label>Ваше имя</label>
+                    <input type="text" name="fullname" value="{$fullname}" placeholder="Имя Фамилия">
+                </div>
+                <div class="form-group">
+                    <label>Логин</label>
+                    <input type="text" name="username" value="{$username}" placeholder="username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Электронная почта</label>
+                <input type="email" name="email" value="{$email}" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label>Телефон</label>
+                <input type="tel" name="phone" value="{$phone}" placeholder="+375 (29) 000-00-00">
+            </div>
+            <div class="form-group">
+                <label>Мобильный телефон</label>
+                <input type="tel" name="mobilephone" value="{$mobilephone}" placeholder="+375 (29) 000-00-00">
+            </div>
+            <div class="form-group">
+                <label>Дата рождения</label>
+                <input type="date" name="dob" value="{$dob}">
+            </div>
+            <div class="form-group">
+                <label>Адрес</label>
+                <input type="text" name="address" value="{$address}" placeholder="г. Минск, ул. Примерная, д. 1">
+            </div>
+            <button type="submit" class="btn">Сохранить изменения</button>
+        </form>
+    </div>
+
+    <!-- Смена пароля -->
+    <div class="section-card">
+        <div class="h2">Безопасность и пароль</div>
+        <form method="post" action="" data-cabinet-form="profile">
+            <input type="hidden" name="action" value="profile/update">
+            <input type="hidden" name="cabinet_csrf_token" value="{$csrf_token}">
+
+            <div class="form-group">
+                <label>Текущий пароль</label>
+                <input type="password" name="specifiedpassword" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+                <label>Новый пароль</label>
+                <input type="password" name="password" placeholder="Введите новый пароль">
+            </div>
+            <div class="form-group">
+                <label>Повторите новый пароль</label>
+                <input type="password" name="confirmpassword" placeholder="Повторите новый пароль">
+            </div>
+            <button type="submit" class="btn">Обновить пароль</button>
+        </form>
+    </div>
+</div>

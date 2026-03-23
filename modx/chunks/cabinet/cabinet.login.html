@@ -1,0 +1,18 @@
+<!-- cabinet.login — Вывод ссылок авторизации / меню кабинета (сниппет cabinetLogin) -->
+
+<!-- Гость — показываем ссылки Войти / Регистрация -->
+{if $modx->user->id == 0}
+<div class="cabinet-guest-links">
+    <a href="[[~[[++cabinet_login_page_id]]]]" class="btn" data-cabinet-action="login">Войти в систему</a>
+</div>
+{else}
+<!-- Авторизованный — показываем мини-меню -->
+<div class="cabinet-user-menu">
+    <div class="avatar-wrap">
+        <img src="{if $photo}{$photo}{else}[[++assets_url]]images/avatar-placeholder.png{/if}" alt="{$fullname}">
+    </div>
+    <span class="cabinet-user-name">{$fullname}</span>
+    <a href="[[~[[++cabinet_home_page_id]]]]" class="nav-link">Личный кабинет</a>
+    <a href="[[~[[++cabinet_logout_page_id]]]]" class="nav-link logout">Выход</a>
+</div>
+{/if}
