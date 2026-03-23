@@ -1,0 +1,135 @@
+<?php
+/**
+ * @var modX $modx
+ * @var Cabinet $cabinet
+ * @var CabinetTools $tools
+ * @var pdoFetch $pdoFetch
+ * @var string $tpl
+ * @var string $tplWrapper
+ * @var string $tplMessageWrapper
+ * @var string $currencySymbol
+ * @var string|array $activeStatuses
+ * @var string|array $completedStatuses
+ * @var string|array $cancelledStatuses
+ * @var string $return
+ * @var string $css
+ * @var string $js
+ * @var array $scriptProperties
+ */
+
+$scriptProperties['page_id'] = $modx->resource->id;
+$cabinet = $modx->getService('cabinet', 'Cabinet');
+$tools = $cabinet->getTools();
+
+if (
+    !$modx->user->isAuthenticated($modx->context->key) ||
+    !$tools->hasAddition('minishop2')
+) {
+    return '';
+}
+
+$pdoFetch = $tools->getPdoTools($scriptProperties, true);
+$cabinet->initialize($modx->context->key, $scriptProperties);
+$tools->setStorageSettings('orders_stats', $scriptProperties);
+
+if (!empty($css)) {
+    $modx->regClientCSS($cabinet->getTools()->preparePath($css));
+}
+
+if (!empty($js)) {
+    $modx->regClientScript($cabinet->getTools()->preparePath($js));
+}
+
+$classKey = 'msOrder';
+$where = ['user_id' => $modx->user->get('id')];
+
+foreach (['where', 'leftJoin', 'innerJoin', 'select', 'groupby'] as $v) {
+    if (!empty($scriptProperties[$v])) {
+        $tmp = $scriptProperties[$v];
+        if (!is_array($tmp)) {
+            $tmp = json_decode($tmp, true);
+        }
+        if (is_array($tmp)) {
+            $$v = array_merge($$v, $tmp);
+        }
+    }
+    unset($scriptProperties[$v]);
+}
+
+$select = [
+    $classKey => $modx->getSelectColumns($classKey, $classKey)
+];
+
+$default = [
+    'class' => $classKey,
+    'where' => $where,
+    'select' => $select,
+    'limit' => 0,
+    'sortby' => 'status',
+    'sortdir' => 'ASC',
+    'fastMode' => false,
+    'decodeJSON' => true,
+];
+
+$pdoFetch->setConfig(array_merge($default, $scriptProperties, ['return' => 'data']));
+$rows = $pdoFetch->run();
+
+$activeStatuses = $tools->explodeAndClean($activeStatuses);
+$completedStatuses = $tools->explodeAndClean($completedStatuses);
+$cancelledStatuses = $tools->explodeAndClean($cancelledStatuses);
+
+$statusIds = [
+    'active' => $activeStatuses,
+    'completed' => $completedStatuses,
+    'cancelled' => $cancelledStatuses,
+];
+
+$stats = [
+    'total' => count($rows),
+    'active' => 0,
+    'completed' => 0,
+    'cancelled' => 0,
+];
+
+$amounts = [];
+foreach ($rows as $row) {
+    foreach ($statusIds as $key => $ids) {
+        if (in_array($row['status'], $ids)) {
+            $stats[$key]++;
+            if ($key === 'completed') {
+                $currency = $tools->detectCurrency($row, $currencySymbol);
+                if (!isset($amounts[$currency])) {
+                    $amounts[$currency] = 0;
+                }
+                $amounts[$currency] += $row['cost'];
+            }
+           break;
+        }
+    }
+}
+
+foreach ($amounts as &$amount) {
+    $amount = $tools->getMs2()->formatPrice($amount);
+}
+
+$data = [
+    'stats' => $stats,
+    'amounts' => $amounts,
+    'scriptProperties' => $scriptProperties,
+];
+
+if ($return === 'data') {
+    return $data;
+}
+
+$output = $tools->getPdoTools()->getChunk($tpl, $data);
+if ($tplWrapper) {
+    $output = $tools->getPdoTools()->getChunk($tplWrapper, array_merge(['output' => $output], $data));
+}
+
+if ($modx->user->hasSessionContext('mgr') && !empty($showLog)) {
+
+    $output .= '<pre>' . print_r($pdoFetch->getTime(), 1) . '</pre>';
+}
+
+return $output;

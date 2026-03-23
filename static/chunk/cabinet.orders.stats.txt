@@ -1,0 +1,63 @@
+<div class="d-none d-lg-block">
+    <div class="order-stats d-flex flex-column gap-3 justify-content-between align-items-stretch flex-lg-row mb-5"
+         data-cabinet-da="#order-stats .offcanvas-body,992">
+        <div class="order-stats__item order-stats__item--amount d-flex align-items-center gap-3 border rounded shadow-sm p-3 pe-5">
+            <div class="order-stats__icon d-flex justify-content-center align-items-center bg-primary text-primary bg-opacity-10 rounded-circle p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-wallet-minimal">
+                    <path d="M17 14h.01"/>
+                    <path d="M7 7h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14"/>
+                </svg>
+            </div>
+            <div class="order-stats__content lh-sm">
+                {if $amounts?}
+                    {foreach $amounts as $currency => $val}
+                        <div class="order-stats__val fs-5">{$val} {$currency}</div>
+                    {/foreach}
+                {else}
+                    <div class="order-stats__val fs-5">0</div>
+                {/if}
+                <div class="order-stats__label text-muted">{'cabinet_order_stats_amount' | lexicon}</div>
+            </div>
+        </div>
+        {foreach $stats as $key => $val}
+            {switch $key}
+            {case 'total' }
+            {set $cls = 'bg-warning text-warning'}
+            {case 'active'}
+            {set $cls = 'bg-info text-info'}
+            {case 'completed'}
+            {set $cls = 'bg-success text-success'}
+            {case 'cancelled'}
+            {set $cls = 'bg-danger text-danger'}
+            {case default}
+            {set $cls = 'bg-secondary text-secondary'}
+            {/switch}
+            <div class="order-stats__item order-stats__item--{$key} d-flex align-items-center gap-3 border rounded shadow-sm p-3 pe-5">
+                <div class="order-stats__icon d-flex  {$cls} bg-opacity-10 justify-content-center align-items-center rounded-circle p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"
+                         class="lucide lucide-package">
+                        <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/>
+                        <path d="M12 22V12"/>
+                        <path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/>
+                        <path d="m7.5 4.27 9 5.15"/>
+                    </svg>
+                </div>
+                <div class="order-stats__content lh-sm">
+                    <div class="order-stats__val fs-5">{$val}</div>
+                    <div class="order-stats__label text-muted">{('cabinet_order_stats_'~$key) | lexicon}</div>
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="order-stats"
+     aria-labelledby="{'cabinet_order_stats' | lexicon}">
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body"></div>
+</div>

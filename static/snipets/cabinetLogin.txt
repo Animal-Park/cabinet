@@ -1,0 +1,64 @@
+<?php
+/**
+ * @var modX $modx
+ * @var Cabinet $cabinet
+ * @var CabinetTools $tools
+ * @var int $loginPageId
+ * @var int $logoutPageId
+ * @var string $js
+ * @var string $css
+ * @var string $tpl
+ * @var string $tplWrapper
+ * @var string $gravatarUrl
+ * @var array $scriptProperties
+ */
+
+$cabinet = $modx->getService('cabinet', 'Cabinet');
+$tools = $cabinet->getTools();
+$modalMode = $modx->getOption('cabinet_auth_modal', null, false);
+
+if (!empty($css)) {
+    $modx->regClientCSS($cabinet->getTools()->preparePath($css));
+}
+
+if (!empty($js)) {
+    $modx->regClientScript($cabinet->getTools()->preparePath($js));
+}
+
+$pageId = $modx->resource->get('id');
+if (empty($scriptProperties['loginPageId'])) {
+    $scriptProperties['loginPageId'] = $loginPageId = $modx->getOption('cabinet_login_page_id', null, $pageId, true);
+}
+
+if (empty($scriptProperties['logoutPageId'])) {
+    $scriptProperties['logoutPageId'] = $logoutPageId = $modx->getOption('cabinet_logout_page_id', null, $pageId, true);
+}
+
+if (empty($scriptProperties['cabinetPageId'])) {
+    $scriptProperties['cabinetPageId'] = $cabinetPageId = $modx->getOption('cabinet_home_page_id', null, 0, true);
+}
+
+
+if ($modx->user->isAuthenticated($modx->context->key)) {
+    $user = $modx->user->toArray();
+    $profile = $modx->user->Profile->toArray();
+    $scriptProperties = array_merge($scriptProperties, $profile, $user);
+    $scriptProperties['gravatar'] = $gravatarUrl . md5(strtolower($profile['email']));
+}
+
+
+$scriptProperties['link_login'] = $tools->makeUrl($loginPageId);
+$scriptProperties['link_signup'] = $scriptProperties['link_login'] . '#auth/signup';
+
+$logoutParams = ['action' => 'auth/logout'];
+if ($logoutPageId) {
+    $logoutParams['logout'] = $logoutPageId;
+}
+$scriptProperties['link_logout'] = $tools->makeUrl($pageId, '', $logoutParams);
+
+$output = $tools->getPdoTools()->getChunk($tpl, $scriptProperties);
+if ($tplWrapper) {
+    $output = $tools->getPdoTools()->getChunk($tplWrapper, array_merge(['output' => $output], $scriptProperties));
+}
+
+return $output;

@@ -1,0 +1,64 @@
+<?php
+/**
+ * @var modX $modx
+ * @var Cabinet $cabinet
+ * @var CabinetTools $tools
+ * @var string $tpl
+ * @var string $tplWrapper
+ * @var string $tplMessageWrapper
+ * @var string $gravatarUrl
+ * @var array $scriptProperties
+ */
+
+if (!$modx->user->isAuthenticated($modx->context->key)) {
+    return $modx->user->isAuthenticated('mgr') ? $modx->lexicon('cabinet_err_mgr_auth') : '';
+}
+
+$scriptProperties['page_id'] = $modx->resource->id;
+$scriptProperties = array_merge(
+    $_REQUEST,
+    [
+        'modal' => $modx->getOption('cabinet_auth_modal', null, false)
+    ],
+    $scriptProperties,
+);
+
+$cabinet = $modx->getService('cabinet', 'Cabinet');
+
+$cabinet->initialize($modx->context->key, $scriptProperties);
+$tools = $cabinet->getTools();
+$tools->setStorageSettings('profile', $scriptProperties);
+
+if (!empty($css)) {
+    $modx->regClientCSS($cabinet->getTools()->preparePath($css));
+}
+
+if (!empty($js)) {
+    $modx->regClientScript($cabinet->getTools()->preparePath($js));
+}
+
+
+if ($modx->getOption('cabinet_enable_socials') && $modx->getOption('cabinet_social_login')) {
+    $scriptProperties['socials'] = $tools->getSocials($modx->resource->get('id'));
+    if ($error = CabinetSocialAuth::getError()) {
+        CabinetSocialAuth::resetError();
+        $scriptProperties['socialMessage'] = $tools->prepareMessage($tplMessageWrapper, $error, 'danger');
+    }
+}
+
+$config = [];
+$user = $modx->user->toArray();
+$profile = $modx->user->Profile->toArray();
+$scriptProperties = array_merge($scriptProperties, $profile, $user);
+$scriptProperties['gravatar'] = $gravatarUrl . md5(strtolower($profile['email']));
+
+$modx->regClientHTMLBlock(
+    '<script data-cfasync="false">cabinetProfile =  new CabinetProfile(' . $modx->toJSON($config) . ');</script>'
+);
+
+$output = $tools->getPdoTools()->getChunk($tpl, $scriptProperties);
+if ($tplWrapper) {
+    $output = $tools->getPdoTools()->getChunk($tplWrapper, array_merge(['output' => $output], $scriptProperties));
+}
+
+return $output;

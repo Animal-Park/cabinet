@@ -1,0 +1,164 @@
+<div class="card">
+    <div class="card-header">
+        <h4 class="mb-0">{'cabinet_profile_title' | lexicon}</h4>
+    </div>
+    <div class="card-body">
+        <div class="d-lg-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center mb-4 mb-lg-0">
+                <label for="avatar-input" class="profile__avatar avatar">
+                    <img id="cabinet-avatar-image" class="avatar__image"  src="{if $photo?}{$photo}{else}{$gravatar}?s=200{/if}" data-cabinet-gravatar="{$gravatar}?s=200" />
+                    <input id="cabinet-avatar-input" class="avatar__input" type="file"  accept="image/*" />
+                </label>
+                <div class="ms-3">
+                    <h6 class="mb-0">{'cabinet_profile_avatar' | lexicon}</h6>
+                    <small class="text-muted lh-sm d-block mb-0">{'cabinet_profile_avatar_info' | lexicon}</small>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-outline-secondary btn-sm" data-cabinet-avatar-update>{'cabinet_profile_avatar_btn_update' | lexicon}</button>
+                <button class="btn btn-outline-danger btn-sm" data-cabinet-avatar-delete {if !$photo} style="display:none;"{/if}>{'cabinet_profile_avatar_btn_delete' | lexicon}</button>
+            </div>
+        </div>
+        <hr class="my-3">
+        <div>
+            <form action="profile/update" class="cabinet__form cabinet__profile profile" data-cabinet-form="profile">
+            <h6 class="card-title">{'cabinet_profile_details' | lexicon}</h6>
+            <small class="text-muted lh-sm d-block mb-4">{'cabinet_profile_social_info' | lexicon}</small>
+            <div class="mb-3">
+                <label for="cabinet-profile-username" class="form-label">{'cabinet_profile_username' | lexicon}</label>
+                <input id="cabinet-profile-username" type="text" name="username" value="{$username}" class="form-control" />
+                <div data-cabinet-feedback></div>
+            </div>
+            <div class="mb-3">
+                <label for="cabinet-profile-fullname" class="form-label">{'cabinet_profile_fullname' | lexicon}</label>
+                <input id="cabinet-profile-fufullname" type="text" name="fullname" value="{$fullname}" class="form-control" />
+                <div data-cabinet-feedback></div>
+            </div>
+            <div class="mb-3">
+                <label for="cabinet-profile-email" class="form-label">{'cabinet_profile_email' | lexicon}</label>
+                <input id="cabinet-profile-email" type="email" name="email" value="{$email}" class="form-control" />
+                <div data-cabinet-feedback></div>
+            </div>
+            <div class="mb-3">
+                <label for="cabinet-profile-phone" class="form-label">{'cabinet_profile_phone' | lexicon}</label>
+                <input id="cabinet-profile-phone" type="tel" name="mobilephone" value="{$mobilephone}" class="form-control" {if $_modx->config.cabinet_auth_mode == 'phone'}required{/if} />
+                <div data-cabinet-feedback></div>
+            </div>
+            {if $_modx->config.cabinet_auth_mode == 'phone'}
+                <div class="mb-3" data-cabinet-confirm="phone" style="display: none;">
+                    <input data-cabinet-otp-code type="hidden" name="phone_code" />
+                    <div class="mb-3">
+                        <div class="cabinet__otp otp">
+                            <div class="otp__timer mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-clock-3">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16.5 12"/>
+                                </svg>
+                                <div class="otp__time" data-cabinet-otp-time>00:00</div>
+                            </div>
+                            <div class="otp__box">
+                                {for $i =1 to=$_modx->config.cabinet_otp_phone_code_length index=$index}
+                                    <input class="otp__input form-control" type="text" data-cabinet-otp pattern="\d" maxlength="1" />
+                                {/for}
+                            </div>
+                        </div>
+                        <div data-cabinet-feedback></div>
+                        <div class="text-center mt-2 mb-3">
+                            <small class="text-muted lh-sm d-block">{'cabinet_profile_confirm_resend_code' | lexicon}</small>
+                        </div>
+                    </div>
+                </div>
+            {/if}
+            <div data-cabinet-message>{$profileMessage}</div>
+            <button class="btn btn-primary" type="submit">{'cabinet_profile_btn_update' | lexicon}</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+ <div class="card mt-5">
+     <div class="card-header">
+         <h4 class="mb-0">{'cabinet_profile_password_title' | lexicon}</h4>
+     </div>
+     <div class="card-body">
+         <div>
+             <form action="profile/password/change" class="cabinet__form cabinet__profile password" data-cabinet-form="password">
+                 {if !$_modx->config.cabinet_auth_activation}
+                 <div class="mb-3">
+                     <label for="cabinet-profile-currentpassword" class="form-label">{'cabinet_profile_current_password' | lexicon}</label>
+                     <div class="cabinet__password-field password-field">
+                        <input id="cabinet-profile-currentpassword" type="password" name="currentpassword"  class="form-control" required />
+                         <button type="button" class="password-field__toggle" data-cabinet-password-toggle></button>
+                     </div>
+                     <div data-cabinet-feedback="currentpassword"></div>
+                 </div>
+                 {/if}
+                 <div class="mb-3">
+                     <label for="cabinet-profile-password" class="form-label">{'cabinet_profile_password' | lexicon}</label>
+                     <div class="cabinet__password-field password-field">
+                         <input id="cabinet-profile-password" type="password" name="password" data-cabinet-password-strength data-cabinet-availability class="form-control" required />
+                         <button type="button" class="password-field__toggle" data-cabinet-password-toggle></button>
+                     </div>
+                     <div id="cabinet-profile-password-strength" class="password-strength"  data-strength="0" data-bs-toggle="tooltip" title="{'cabinet_auth_signup_password_stability' | lexicon}"></div>
+                     <div data-cabinet-feedback="password"></div>
+                 </div>
+                 <div class="mb-3">
+                     <label for="cabinet-profile-confirmpassword" class="form-label">{'cabinet_profile_confirmpassword' | lexicon}</label>
+                     <div class="cabinet__password-field password-field">
+                        <input id="cabinet-profile-confirmpassword" type="password" name="confirmpassword" class="form-control" required />
+                         <button type="button" class="password-field__toggle" data-cabinet-password-toggle></button>
+                     </div>
+                     <div data-cabinet-feedback="confirmpassword"></div>
+                 </div>
+                 <div data-cabinet-message>{$passwordMessage}</div>
+                 <button class="btn btn-primary" type="submit">{'cabinet_profile_btn_change' | lexicon}</button>
+             </form>
+         </div>
+         {if $socials && $_modx->config.cabinet_social_login}
+             <hr class="my-4">
+             <div>
+                 <h6 class="card-title">{'cabinet_profile_social_title' | lexicon}</h6>
+                 <small class="text-muted lh-sm d-block">{'cabinet_profile_social_info' | lexicon}</small>
+                 <div class="mt-4 mb-3">
+                     <div class="cabinet__auth-socials socials d-flex gap-3 mt-3">
+                         {foreach $socials as $key => $social}
+                             <div class="socials__item cabinet-shadow-hover rounded{if !$social.active} socials__item--inactive cabinet-grayscale-opacity{/if}">
+                                 <a class="socials__link" href="{if $social.active}{$social.unbind_url}{else}{$social.login_url}{/if}">
+                                     <img class="socials__icon" src="/assets/components/cabinet/images/social/{$key}.svg"
+                                          title="{if $social.active}{'cabinet_profile_tooltip_social_remove' | lexicon}{else}{'cabinet_profile_tooltip_social_add' | lexicon}{/if}{$social.title}">
+                                 </a>
+                             </div>
+                         {/foreach}
+                     </div>
+                 </div>
+                 <div data-cabinet-message>{$socialMessage}</div>
+             </div>
+         {/if}
+     </div>
+ </div>
+
+<noindex>
+<dialog class="cabinet cabinet-modal" inert loading data-cabinet-modal="avatar" data-cf-cache-status="bypass" data-nosnippet>
+    <div class="cabinet-modal__inner">
+        <div class="cabinet-modal__header">
+            <button type="button" class="cabinet-modal__close" data-cabinet-modal-close title="{'cabinet_btn_close'|lexicon}" aria-label="{'cabinet_btn_close'|lexicon}">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="cabinet-modal__content" data-cabinet-content>
+            <div class="cabinet-modal__avatar">
+                <img id="cabinet-modal-avatar" />
+            </div>
+        </div>
+        <div class="cabinet-modal__footer">
+            <button type="button" class="btn btn-secondary me-2"  data-cabinet-modal-close aria-label="Close">{'cabinet_profile_btn_close' | lexicon}</button>
+            <button type="button" class="btn btn-primary"  data-cabinet-avatar-crop aria-label="Close">{'cabinet_profile_btn_apply' | lexicon}</button>
+        </div>
+    </div>
+</dialog>
+</noindex>

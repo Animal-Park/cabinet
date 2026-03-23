@@ -1,0 +1,37 @@
+<?php
+/**
+ * @var modX $modx
+ * @var Cabinet $cabinet
+ * @var CabinetTools $tools
+ * @var string $tpl
+ * @var string $tplWrapper
+ * @var int $detailsPageId
+ * @var array $scriptProperties
+ */
+$cabinet = $modx->getService('cabinet', 'Cabinet');
+$tools = $cabinet->getTools();
+$pdoFetch = $tools->getPdoTools($scriptProperties, true);
+
+if (!isset($_GET['order'])) {
+    $modx->sendErrorPage();
+}
+
+$scriptProperties['return'] = 'data';
+$scriptProperties['detailsOrderId'] = (int)$_GET['order'];
+
+$result = $modx->runSnippet('cabinetOrders', $scriptProperties) ?: [];
+
+$data = reset($result['orders']);
+$data['scriptProperties'] = $result['scriptProperties'] ?? [];
+
+$output = $pdoFetch->getChunk($tpl, $data);
+if ($tplWrapper) {
+    $output = $pdoFetch->getChunk($tplWrapper, array_merge(['output' => $output], $data));
+}
+
+if ($modx->user->hasSessionContext('mgr') && !empty($showLog)) {
+
+    $output .= '<pre>' . print_r($pdoFetch->getTime(), 1) . '</pre>';
+}
+
+return $output;

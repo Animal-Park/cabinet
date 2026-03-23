@@ -1,0 +1,357 @@
+<div class="cabinet mt-5">
+    {'!cabinetOrdersStats' | snippet}
+    {if $orders || $filters}
+        <div class="order-toggles mb-3">
+            <button class="order-filter__toggle btn btn-primary btn-sm d-lg-none" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#orders-filter"
+                    aria-controls="{'cabinet_order_filter' | lexicon}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-filter">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                </svg>
+                {'cabinet_order_filter' | lexicon}
+            </button>
+            <button class="order-stats__toggle btn btn-outline-primary btn-sm d-lg-none" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#order-stats"
+                    aria-controls="{'cabinet_order_stats' | lexicon}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-chart-pie">
+                    <path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"/>
+                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+                </svg>
+                {'cabinet_order_stats' | lexicon}
+            </button>
+        </div>
+        <div class="order-filter">
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="orders-filter"
+                 aria-labelledby="{'cabinet_order_filter' | lexicon}">
+                <div class="offcanvas-header">
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body"></div>
+            </div>
+            <div class="order-filter__body p-4 mb-4 border rounded shadow-sm d-none d-lg-block">
+                <form method="get"
+                      class="order-filter__form d-flex flex-column gap-4 flex-lg-row justify-content-lg-between align-items-lg-center"
+                      data-force="1" data-cabinet-form="order-filter"
+                      data-cabinet-da="#orders-filter .offcanvas-body,992">
+                    <div class="order-filter__fields d-flex flex-column  gap-2 flex-lg-row align-items-lg-center gap-lg-5">
+                        <div class="order-filter__field d-flex flex-column gap-1 flex-lg-row align-items-lg-center gap-lg-2">
+                            <label for="order-filter-date-from"
+                                   class="order-filter__label text-nowrap text-muted">{'cabinet_order_filter_from' | lexicon}</label>
+                            <input id="order-filter-date-from"
+                                   class="order-filter__input order-filter__input--date form-control form-control-sm"
+                                   type="date"
+                                   name="from" value="{$filters.from}">
+                        </div>
+                        <div class="order-filter__field d-flex flex-column gap-1 flex-lg-row align-items-lg-center gap-lg-2">
+                            <label for="order-filter-date-to"
+                                   class="order-filter__label text-nowrap text-muted">{'cabinet_order_filter_to' | lexicon}</label>
+                            <input id="order-filter-date-to"
+                                   class="order-filter__input order-filter__input--date form-control form-control-sm"
+                                   type="date"
+                                   name="to" value="{$filters.to}">
+                        </div>
+                        <div class="order-filter__field d-flex flex-column gap-1 flex-lg-row align-items-lg-center gap-lg-2">
+                            <label for="order-filter-status"
+                                   class="order-filter__label text-nowrap text-muted">{'cabinet_order_filter_status' | lexicon}</label>
+                            <select id="order-filter-status"
+                                    class="order-filter__input order-filter__input--select form-control form-control-sm"
+                                    name="status">
+                                <option value="">{'cabinet_order_status_all' | lexicon}</option>
+                                {foreach $statuses as $status}
+                                    <option value="{$status}"{if $status == $filters.status} selected{/if}>{('cabinet_order_status_' ~ $status) | lexicon }</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="order-filter__actions d-flex justify-content-center align-items-center gap-3 justify-content-lg-end">
+                        <button type="reset"
+                                class="order-filter__btn order-filter__btn--reset btn btn-sm btn-outline-secondary d-flex align-items-center gap-1"
+                                title="{'cabinet_order_filter_reset' | lexicon}"
+                                aria-label="{'cabinet_order_filter_reset' | lexicon}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-delete">
+                                <path d="M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/>
+                                <path d="m12 9 6 6"/>
+                                <path d="m18 9-6 6"/>
+                            </svg>
+                            <span>{'cabinet_order_filter_reset' | lexicon}</span>
+                        </button>
+                        <button type="submit"
+                                class="order-filter__btn order-filter__btn--apply btn btn-sm btn-primary d-flex align-items-center gap-1"
+                                title="{'cabinet_order_filter_apply' | lexicon}"
+                                aria-label="{'cabinet_order_filter_apply' | lexicon}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-filter">
+                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                            </svg>
+                            <span>{'cabinet_order_filter_apply' | lexicon}</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    {/if}
+    {if $orders?}
+        <div class="orders d-flex flex-column gap-5">
+            {foreach $orders as $id => $item}
+                <div class="order px-3 border rounded shadow-sm">
+                    <div class="order__header d-flex flex-column gap-3 flex-lg-row  justify-content-lg-between align-items-lg-center border-bottom py-3">
+                        <div class="order-info d-flex flex-column gap-1  flex-md-row gap-md-5">
+                            <div class="order-info__item order-info__item--num d-flex justify-content-between flex-md-column">
+                                <span class="order-info__item-label d-block text-muted">{'cabinet_order' | lexicon}</span>
+                                <span class="order-info__item-val fw-bold">#{$item.order.num}</span>
+                            </div>
+                            <div class="order-info__item order-info__item--createdon d-flex justify-content-between flex-md-column">
+                                <span class="order-info__item-label  d-block text-muted">{'cabinet_order_createdon' | lexicon}</span>
+                                <span class="order-info__item-val fw-bold">{$item.order.createdon | date_format:"%e %b %Y"}</span>
+                            </div>
+                            <div class="order-info__item order-info__item--cost d-flex justify-content-between flex-md-column">
+                                <span class="order-info__item-label d-block text-muted">{'cabinet_order_total' | lexicon}</span>
+                                <span class="order-info__item-val fw-bold">{$item.total.cost} {$item.currency}</span>
+                            </div>
+                            <div class="order-info__item order-info__item--status d-flex justify-content-between flex-md-column">
+                                <span class="order-info__item-label d-block text-muted">{'cabinet_order_status' | lexicon}</span>
+                                {switch $item.order.status}
+                                {case 1 }
+                                {set $cls_status = 'bg-info'}
+                                {case 2}
+                                {set $cls_status = 'bg-success'}
+                                {case 3}
+                                {set $cls_status = 'bg-primary'}
+                                {case 4}
+                                {set $cls_status = 'bg-danger'}
+                                {case default}
+                                {set $cls_status = 'bg-secondary'}
+                                {/switch}
+                                <span class="order-info__item-val status-{$item.order.status} d-flex align-items-center fw-bold badge {$cls_status} rounded-pill">{('cabinet_order_status_' ~ $item.order.status) | lexicon }</span>
+                            </div>
+                        </div>
+                        <div class="order__actions d-flex align-items-center gap-3">
+                            <a href="{$item.link_details}"
+                               class="order__action order__action--details btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+                               title="{'cabinet_order_details' | lexicon}"
+                               aria-label="{'cabinet_order_details' | lexicon}" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                                     stroke-linejoin="round" class="lucide lucide-info">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 16v-4"/>
+                                    <path d="M12 8h.01"/>
+                                </svg>
+                                <span>{'cabinet_order_details' | lexicon}</span>
+                            </a>
+                            {if $item.link_share?}
+                                <button type="button"
+                                        class="order__action order__action--share btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1"
+                                        data-bs-toggle="dropdown" aria-expanded="false"
+                                        title="{'cabinet_order_share' | lexicon}"
+                                        aria-label="{'cabinet_order_share' | lexicon}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                                         stroke-linejoin="round" class="lucide lucide-share-2">
+                                        <circle cx="18" cy="5" r="3"/>
+                                        <circle cx="6" cy="12" r="3"/>
+                                        <circle cx="18" cy="19" r="3"/>
+                                        <line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/>
+                                        <line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>
+                                    </svg>
+                                    <span>{'cabinet_order_share' | lexicon}</span>
+                                </button>
+                                <ul class="dropdown-menu order__share">
+                                    <li>
+                                        <div class="order__share-item dropdown-item-text d-flex align-items-center gap-3 p-2">
+                                            <a class="order__share-link" href="{$item.link_share}"
+                                               data-cabinet-clipboard="{$item.link_share}"
+                                               data-cabinet-notice="{'cabinet_link_copy_clipboard' | lexicon}">
+                                                <img class="order__share-icon"
+                                                     src="/assets/components/cabinet/images/social/circle/copy.svg"
+                                                     title="{'cabinet_link_to_clipboard' | lexicon}">
+                                            </a>
+                                            <a class="order__share-link"
+                                               href="https://telegram.me/share/url?url={$item.link_share}"
+                                               target="_blank">
+                                                <img class="order__share-icon"
+                                                     src="/assets/components/cabinet/images/social/circle/telegram.svg"
+                                                     title="{'cabinet_share_in' | lexicon} Telegram">
+                                            </a>
+                                            <a class="order__share-link" href="viber://forward?text={$item.link_share}"
+                                               target="_blank">
+                                                <img class="order__share-icon"
+                                                     src="/assets/components/cabinet/images/social/circle/viber.svg"
+                                                     title="{'cabinet_share_in' | lexicon} Viber">
+                                            </a>
+                                            <a class="order__share-link" href="whatsapp://send?text={$item.link_share}"
+                                               target="_blank">
+                                                <img class="order__share-icon"
+                                                     src="/assets/components/cabinet/images/social/circle/whatsapp.svg"
+                                                     title="{'cabinet_share_in' | lexicon} WhatsApp">
+                                            </a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="order__share-item dropdown-item-text d-flex align-items-center gap-3 p-2">
+                                            <a class="order__share-link"
+                                               href="https://www.facebook.com/sharer/sharer.php?u={$item.link_share}"
+                                               target="_blank">
+                                                <img class="order__share-icon"
+                                                     src="/assets/components/cabinet/images/social/circle/facebook.svg"
+                                                     title="{'cabinet_share_in' | lexicon} Facebook">
+                                            </a>
+                                            <a class="order__share-link"
+                                               href="https://connect.ok.ru/offer?url={$item.link_share}"
+                                               target="_blank">
+                                                <img class="order__share-icon"
+                                                     src="/assets/components/cabinet/images/social/circle/ok.svg"
+                                                     title="{'cabinet_share_in' | lexicon} Одноклассники">
+                                            </a>
+                                            <a class="order__share-link"
+                                               href="https://vk.com/share.php?url={$item.link_share}" target="_blank">
+                                                <img class="order__share-icon"
+                                                     src="/assets/components/cabinet/images/social/circle/vk.svg"
+                                                     title="{'cabinet_share_in' | lexicon} ВКонтакте">
+                                            </a>
+                                            <a class="order__share-link"
+                                               href="https://x.com/intent/post?text={$item.link_share}" target="_blank">
+                                                <img class="order__share-icon"
+                                                     src="/assets/components/cabinet/images/social/circle/x.svg"
+                                                     title="{'cabinet_share_in' | lexicon} Twitter X">
+                                            </a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            {/if}
+                            {if $item.cancelable?}
+                                <button type="button"
+                                        class="order__action order__action--abort btn btn-sm btn-outline-danger  d-flex align-items-center gap-1"
+                                        data-cabinet-order-cancel="{$id}" title="{'cabinet_order_cancel' | lexicon}"
+                                        aria-label="{'cabinet_order_cancel' | lexicon}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                                         stroke-linejoin="round" class="lucide lucide-trash-2">
+                                        <path d="M3 6h18"/>
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                        <line x1="10" x2="10" y1="11" y2="17"/>
+                                        <line x1="14" x2="14" y1="11" y2="17"/>
+                                    </svg>
+                                    <span class="d-none d-md-inline-block">{'cabinet_order_cancel' | lexicon}</span>
+                                </button>
+                            {/if}
+                        </div>
+                    </div>
+                    <div class="order__body">
+                        {foreach $item.products as $product}
+                            <div class="order__item row gap-3 gap-md-0 align-items-md-center my-4">
+                                <div class="order__item-media col-md-3  col-lg-2 text-center">
+                                    <a href="{$product.id | url}" target="_blank">
+                                        <img class="order__item-thumb img-fluid rounded w-75{if !$product.is_available} cabinet-grayscale-opacity{/if}"
+                                             src="{$product.thumb}">
+                                    </a>
+                                </div>
+                                <div class="order__item-content col-md-9 col-lg-10">
+                                    <div class="order__item-header d-flex flex-column flex-lg-row mb-3 gap-2 justify-content-lg-between align-items-lg-center">
+                                        <div class="order__item-title fw-bold">
+                                            <a href="{$product.id | url}" class="text-reset text-decoration-none"
+                                               target="_blank">{$product.name}</a>
+                                        </div>
+                                        <div class="order__item-price fw-bold">
+                                            <span class="order__item-price-val">{$product.price}</span>
+                                            <span class="order__item-price-currency">{$item.currency}</span>
+                                        </div>
+                                    </div>
+                                    <div class="order__item-desc text-muted">{$product.description | notags | limit:256}</div>
+                                    <div class="order__item-footer d-flex flex-column gap-3 flex-lg-row justify-content-lg-between align-items-lg-center mt-3">
+                                        <div class="order-info__item d-flex align-items-center gap-3">
+                                            {if $product.article?}
+                                                <div class="order-info__item order-info__item--article">
+                                                    <span class="order-info__item-label text-muted me-1">{'cabinet_order_article' | lexicon}</span>
+                                                    <span class="order-info__item-val fw-bold">{$product.article}</span>
+                                                </div>
+                                            {/if}
+                                            <div class="order-info__item order-info__item--count">
+                                                <span class="order-info__item-label text-muted me-1">{'cabinet_order_count' | lexicon}</span>
+                                                <span class="order-info__item-val fw-bold">{$product.count}</span>
+                                            </div>
+                                            <div class="order-info__item order-info__item--cost">
+                                                <span class="order-info__item-label text-muted me-1">{'cabinet_order_cost' | lexicon}</span>
+                                                <span class="order-info__item-val fw-bold">{$product.cost} {$item.currency}</span>
+                                            </div>
+                                        </div>
+                                        <div class="order__actions d-flex align-items-center gap-3">
+                                            {if $product.is_available?}
+                                                <form method="post" class="ms2_form">
+                                                    <input type="hidden" name="id" value="{$product.id}">
+                                                    <input type="hidden" name="count" value="{$product.count}">
+                                                    <input type="hidden" name="options" value='{$product.options}'>
+                                                    <button type="submit"
+                                                            class="order__action order__item-action--reorder btn btn-sm btn-primary d-flex align-items-center gap-1"
+                                                            name="ms2_action" value="cart/add"
+                                                            title="{'cabinet_order_reorder' | lexicon}"
+                                                            aria-label="{'cabinet_order_reorder' | lexicon}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                             stroke-width="1.75" stroke-linecap="round"
+                                                             stroke-linejoin="round"
+                                                             class="lucide lucide-shopping-cart">
+                                                            <circle cx="8" cy="21" r="1"/>
+                                                            <circle cx="19" cy="21" r="1"/>
+                                                            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+                                                        </svg>
+                                                        <span>{'cabinet_order_reorder' | lexicon}</span>
+                                                    </button>
+                                                </form>
+                                            {else}
+                                                <button type="button"
+                                                        class="order__action order__item-action--notify-availability btn btn-sm btn-secondary d-flex align-items-center gap-1"
+                                                        data-msisn-trigger data-msisn-id="{$product.id}"
+                                                        title="{'cabinet_order_notify_availability' | lexicon}"
+                                                        aria-label="{'cabinet_order_notify_availability' | lexicon}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                         stroke-width="1.75" stroke-linecap="round"
+                                                         stroke-linejoin="round" class="lucide lucide-bell">
+                                                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                                                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                                                    </svg>
+                                                    <span>{'cabinet_order_notify_availability' | lexicon}</span>
+                                                </button>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {if !$product@last}
+                                <hr class="my-4">
+                            {/if}
+                        {/foreach}
+                    </div>
+                </div>
+            {/foreach}
+        </div>
+    {else}
+        <div class="alert alert-warning d-flex align-items-center" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            <div>
+                {if $filters?}
+                    {'cabinet_order_nf' | lexicon}
+                {else}
+                    {'cabinet_order_empty' | lexicon}
+                {/if}
+            </div>
+        </div>
+    {/if}
+</div>

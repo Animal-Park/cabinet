@@ -1,0 +1,60 @@
+<?php
+/**
+ * @var modX $modx
+ * @var Cabinet $cabinet
+ * @var CabinetTools $tools
+ * @var string $tpl
+ * @var string $tplWrapper
+ * @var string $tplMessageWrapper
+ * @var string $css
+ * @var string $js
+ * @var array $scriptProperties
+ */
+
+$scriptProperties['page_id'] = $modx->resource->id;
+$cabinet = $modx->getService('cabinet', 'Cabinet');
+$tools = $cabinet->getTools();
+
+if (!isset($_GET['order'])) {
+    $modx->sendErrorPage();
+}
+
+if (!$tools->hasAddition('minishop2')) {
+    return '';
+}
+
+$pdoFetch = $tools->getPdoTools($scriptProperties, true);
+$cabinet->initialize($modx->context->key, $scriptProperties);
+$tools->setStorageSettings('shared_order', $scriptProperties);
+
+if (!empty($css)) {
+    $modx->regClientCSS($cabinet->getTools()->preparePath($css));
+}
+
+if (!empty($js)) {
+    $modx->regClientScript($cabinet->getTools()->preparePath($js));
+}
+
+$config = [];
+$modx->regClientHTMLBlock(
+    '<script data-cfasync="false">cabinetOrders =  new CabinetOrders(' . $modx->toJSON($config) . ');</script>'
+);
+
+$data = [];
+$order = $modx->getObject('msOrder', ['share_key' => $_GET['order']]);
+if ($order) {
+    $data = $tools->getOrderProducts($order->get('id'), $scriptProperties);
+}
+
+$data['scriptProperties'] = $scriptProperties;
+$output = $tools->getPdoTools()->getChunk($tpl, $data);
+if ($tplWrapper) {
+    $output = $tools->getPdoTools()->getChunk($tplWrapper, array_merge(['output' => $output], $data));
+}
+
+if ($modx->user->hasSessionContext('mgr') && !empty($showLog)) {
+
+    $output .= '<pre>' . print_r($pdoFetch->getTime(), 1) . '</pre>';
+}
+
+return $output;

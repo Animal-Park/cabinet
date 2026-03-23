@@ -1,0 +1,129 @@
+<?php
+/**
+ * @var modX $modx
+ * @var Cabinet $cabinet
+ * @var CabinetTools $tools
+ * @var pdoFetch $pdoFetch
+ * @var int $limit
+ * @var int $offset
+ * @var string $sortdir
+ * @var string $sortby
+ * @var string|array $where
+ * @var string|array $statusAlias
+ * @var string $tpl
+ * @var string $tplWrapper
+ * @var string $tplMessageWrapper
+ * @var string $css
+ * @var string $js
+ * @var array $scriptProperties
+ */
+
+$scriptProperties['page_id'] = $modx->resource->id;
+$cabinet = $modx->getService('cabinet', 'Cabinet');
+$tools = $cabinet->getTools();
+
+if (
+    !$modx->user->isAuthenticated($modx->context->key) ||
+    !$tools->hasAddition('minishop2')
+) {
+    return '';
+}
+
+$pdoFetch = $tools->getPdoTools($scriptProperties, true);
+$cabinet->initialize($modx->context->key, $scriptProperties);
+$tools->setStorageSettings('orders', $scriptProperties);
+
+if (!empty($css)) {
+    $modx->regClientCSS($cabinet->getTools()->preparePath($css));
+}
+
+if (!empty($js)) {
+    $modx->regClientScript($cabinet->getTools()->preparePath($js));
+}
+
+$config = [];
+$modx->regClientHTMLBlock(
+    '<script data-cfasync="false">cabinetOrders =  new CabinetOrders(' . $modx->toJSON($config) . ');</script>'
+);
+
+$filters = [];
+$classKey = 'msOrder';
+$where = ['user_id' => $modx->user->get('id')];
+if (!empty($_GET['from']) && $from = strtotime($_GET['from'])) {
+    $filters['from'] = date('Y-m-d', $from);
+    $where['createdon:>='] = date('Y-m-d 00:00:00', $from);
+}
+
+if (!empty($_GET['to']) && $to = strtotime($_GET['to'])) {
+    $filters['to'] = date('Y-m-d', $to);
+    $where['createdon:<='] = date('Y-m-d 23:59:59', $to);
+}
+
+if (!empty($_GET['status'])) {
+    $status = (int)$_GET['status'];
+    $filters['status'] = $status;
+    $statusAlias = $tools->prepareOrderStatusAlias($options['statusAlias'] ?? '', true);
+    $where['status'] = $statusAlias[$status] ?? $status;
+}
+
+if (isset($scriptProperties['detailsOrderId'])) {
+    $where['id'] = (int)$scriptProperties['detailsOrderId'] ?: 0;
+}
+
+foreach (['where', 'leftJoin', 'innerJoin', 'select', 'groupby'] as $v) {
+    if (!empty($scriptProperties[$v])) {
+        $tmp = $scriptProperties[$v];
+        if (!is_array($tmp)) {
+            $tmp = json_decode($tmp, true);
+        }
+        if (is_array($tmp)) {
+            $$v = array_merge($$v, $tmp);
+        }
+    }
+    unset($scriptProperties[$v]);
+}
+
+$select = [
+    $classKey => $modx->getSelectColumns($classKey, $classKey, '', ['id'])
+];
+
+$default = [
+    'class' => $classKey,
+    'where' => $where,
+    'select' => $select,
+    'limit' => $limit,
+    'sortby' => $sortby,
+    'sortdir' => $sortdir,
+    'fastMode' => false,
+];
+
+$pdoFetch->setConfig(array_merge($default, $scriptProperties, ['return' => 'data']));
+$rows = $pdoFetch->run();
+
+$orders = [];
+foreach ($rows as $row) {
+    $orders[$row['id']] = $tools->getOrderProducts($row['id'], $scriptProperties);
+}
+
+$data = [
+    'orders' => $orders,
+    'filters' => $filters,
+    'statuses' => $tools->getOrderStatuses($scriptProperties),
+    'scriptProperties' => $scriptProperties,
+];
+
+if ($return === 'data') {
+    return $data;
+}
+
+$output = $tools->getPdoTools()->getChunk($tpl, $data);
+if ($tplWrapper) {
+    $output = $tools->getPdoTools()->getChunk($tplWrapper, array_merge(['output' => $output], $data));
+}
+
+if ($modx->user->hasSessionContext('mgr') && !empty($showLog)) {
+
+    $output .= '<pre>' . print_r($pdoFetch->getTime(), 1) . '</pre>';
+}
+
+return $output;

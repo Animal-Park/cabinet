@@ -1,0 +1,70 @@
+{if $_modx->isAuthenticated()}
+    <div class="dropdown">
+        <button class="btn btn-outline-primary btn-sm dropdown-toggle d-flex align-items-center gap-1" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"
+                 class="lucide lucide-user">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
+            {'pdoField' | snippet:['id' => $cabinetPageId]}
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <div class="dropdown-item-text">
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="{if $photo?}{$photo}{else}{$gravatar}?s=100{/if}" class="rounded-circle"
+                             alt="{$fullname}" title="{$fullname}" style="height: 30px">
+                        <strong>{$username}</strong>
+                    </div>
+                </div>
+            </li>
+            {'pdoMenu' | snippet : [
+            'parents' => $cabinetPageId,
+            'level' => 1,
+            'tplOuter'=> '@INLINE [[+wrapper]]',
+            'tpl'=> '@INLINE <li class="[[+classnames]]"><a class="dropdown-item" href="[[+link]]" [[+attributes]]>[[+menutitle]]</a></li>',
+            ]}
+            <li><a class="dropdown-item d-flex align-items-center gap-1"
+                   href="{$link_logout}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"
+                         class="lucide lucide-log-out">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" x2="9" y1="12" y2="12"/>
+                    </svg>
+                    {'cabinet_auth_btn_logout' | lexicon}
+                </a>
+            </li>
+        </ul>
+    </div>
+{else}
+    <div class="btn-group">
+        <a class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" href="{$link_login}"
+           data-cabinet-modal-trigger="auth/login">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"
+                 class="lucide lucide-lock">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            {'cabinet_auth_btn_login' | lexicon}
+        </a>
+    </div>
+    <div class="btn-group">
+        <a class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1" href="{$link_signup}"
+           data-cabinet-modal-trigger="auth/signup">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"
+                 class="lucide lucide-user-plus">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <line x1="19" x2="19" y1="8" y2="14"/>
+                <line x1="22" x2="16" y1="11" y2="11"/>
+            </svg>
+            {'cabinet_auth_btn_signup' | lexicon}
+        </a>
+    </div>
+{/if}

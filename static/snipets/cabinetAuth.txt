@@ -1,0 +1,92 @@
+<?php
+/**
+ * @var modX $modx
+ * @var Cabinet $cabinet
+ * @var CabinetTools $tools
+ * @var int $otpTTL
+ * @var int $loginPageId
+ * @var string $widget
+ * @var string $tpl
+ * @var string $tplLogout
+ * @var string $tplWrapper
+ * @var string $tplMessageWrapper
+ * @var string $gravatarUrl
+ * @var array $scriptProperties
+ */
+
+$cabinet = $modx->getService('cabinet', 'Cabinet');
+
+if (!empty($_GET['auth_widget'])) {
+    $scriptProperties['widget'] = $_GET['auth_widget'];
+}
+$scriptProperties['page_id'] = $modx->resource->id;
+
+$pageId = $modx->resource->get('id');
+
+
+$modalMode = $modx->getOption('cabinet_auth_modal', null, false);
+$scriptProperties = array_merge(
+    $_REQUEST,
+    [
+        'modal' => $modalMode
+    ],
+    $scriptProperties,
+    $cabinet->getActionResponseData()
+);
+
+if (empty($scriptProperties['loginPageId'])) {
+    $defaultLoginPageId = $modalMode ? $pageId : $modx->getOption('site_start');
+    $scriptProperties['loginPageId'] = $loginPageId = $modx->getOption('cabinet_home_page_id', null, $defaultLoginPageId, true);
+}
+
+
+$widget = $scriptProperties['widget'] ?? '';
+$cabinet->initialize($modx->context->key, $scriptProperties);
+$tools = $cabinet->getTools();
+$tools->setStorageSettings('auth', $scriptProperties);
+
+if ($modx->user->isAuthenticated($modx->context->key)) {
+    if ($modalMode) {
+        return '';
+    } else {
+        if ($loginPageId) {
+            $url = $tools->makeUrl($loginPageId);
+            $modx->sendRedirect($url);
+        }
+    }
+}
+
+if (!empty($css)) {
+    $modx->regClientCSS($cabinet->getTools()->preparePath($css));
+}
+
+if (!empty($js)) {
+    $modx->regClientScript($cabinet->getTools()->preparePath($js));
+}
+
+$config = [
+    'widget' => $widget,
+    'hasWidgetMessage' => !empty($scriptProperties["{$widget}Message"]),
+    'otpTTL' => $modx->getOption('otpTTL', null, 180, true),
+    'otpLength' => $modx->getOption('cabinet_otp_phone_code_length', null, 4)
+];
+
+$modx->regClientHTMLBlock(
+    '<script data-cfasync="false">cabinetAuth =  new CabinetAuth(' . $modx->toJSON($config) . ');</script>'
+);
+
+if ($modx->getOption('cabinet_enable_socials')) {
+    $scriptProperties['socials'] = $tools->getSocials($scriptProperties['loginPageId']);
+    if ($error = CabinetSocialAuth::getError()) {
+        CabinetSocialAuth::resetError();
+        $scriptProperties["{$widget}Message"] = $tools->prepareMessage($tplMessageWrapper, $error, 'danger');
+    }
+}
+$scriptProperties['useYaSmartCaptcha'] = $tools->isUseYaSmartCaptcha();
+
+$output = $tools->getPdoTools()->getChunk($tpl, $scriptProperties);
+if ($tplWrapper) {
+    $output = $tools->getPdoTools()->getChunk($tplWrapper, array_merge(['output' => $output], $scriptProperties));
+}
+
+return $output;

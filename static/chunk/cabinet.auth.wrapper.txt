@@ -1,0 +1,32 @@
+<noindex>
+{if $modal?}
+    <dialog class="cabinet cabinet-modal" inert loading data-cabinet-modal="auth" data-cf-cache-status="bypass"
+            data-nosnippet>
+        <div class="cabinet-modal__inner">
+            <div class="cabinet-modal__header">
+                <button type="button" class="cabinet-modal__close" data-cabinet-modal-close
+                        title="{'cabinet_btn_close'|lexicon}" aria-label="{'cabinet_btn_close'|lexicon}">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="cabinet-modal__content" data-cabinet-content>
+                {$output}
+            </div>
+        </div>
+    </dialog>
+{else}
+    <div class="cabinet row align-items-center justify-content-center g-0 min-vh-100" data-cf-cache-status="bypass"
+         data-nosnippet>
+        <div class="col-lg-5 col-md-8 py-8 py-xl-0">
+            <div class="card shadow">
+                <div class="card-body card-body p-5">
+                    {$output}
+                </div>
+            </div>
+        </div>
+    </div>
+{/if}
+</noindex>

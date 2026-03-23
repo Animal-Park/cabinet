@@ -1,0 +1,201 @@
+<form action="auth/login" class="cabinet__form"
+      data-cabinet-form="login" {if $widget !='login'} style="display: none; opacity: 0;"{/if}>
+    <div class="text-center mb-4">
+        <div class="fs-3">{'cabinet_auth_login' | lexicon}</div>
+        <span>{'cabinet_auth_login_no_account' | lexicon}</span>
+    </div>
+    <div class="mb-3">
+        <label for="cabinet-auth-login-username">{'cabinet_auth_login_username' | lexicon}</label>
+        <input id="cabinet-auth-login-username" type="text" name="username" data-cabinet-availability
+               class="form-control" required/>
+        <div data-cabinet-feedback></div>
+        <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_login_username_desc' | lexicon}</small>
+    </div>
+    <div class="mb-3">
+        <label for="cabinet-auth-login-password">{'cabinet_auth_login_password' | lexicon}</label>
+        <div class="cabinet__password-field password-field">
+            <input id="cabinet-auth-login-password" type="password" name="password" class="form-control" required/>
+            <button class="password-field__toggle" data-cabinet-password-toggle></button>
+        </div>
+        <div data-cabinet-feedback></div>
+        <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_login_password_desc' | lexicon}</small>
+    </div>
+    <div data-cabinet-message>{$loginMessage}</div>
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-check">
+                <input id="cabinet-auth-login-remember" class="form-check-input" type="checkbox" name="remember"
+                       value="1">
+                <label class="form-check-label div text-secondary" for="cabinet-auth-login-remember">
+                    {'cabinet_auth_login_remember' | lexicon}
+                </label>
+            </div>
+        </div>
+        <div class="col text-end">
+            <a href="#" class="underline div">{'cabinet_auth_login_recovery_password' | lexicon }</a>
+        </div>
+    </div>
+    {if $useYaSmartCaptcha?}
+        <div class="smart-captcha mb-3" id="smart-captcha-auth-login"></div>
+    {/if}
+    <button type="submit" class="btn btn-primary w-100">{'cabinet_auth_login_btn' | lexicon}</button>
+    {if $socials && $_modx->config.cabinet_social_login}
+        <div class="mt-4">
+            <div class="text-center text-secondary">{'cabinet_auth_login_social' | lexicon}</div>
+            <div class="cabinet__auth-socials socials socials--center d-flex justify-content-center gap-3 mt-3">
+                {foreach $socials as $key => $social}
+                    <div class="socials__item cabinet-shadow-hover rounded">
+                        <a class="socials__link" href="{$social.login_url}">
+                            <img class="socials__icon" src="/assets/components/cabinet/images/social/{$key}.svg"
+                                 title="{$social.title}">
+                        </a>
+                    </div>
+                {/foreach}
+            </div>
+            <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_login_social_desc' | lexicon}</small>
+        </div>
+    {/if}
+</form>
+<form action="auth/recovery" class="cabinet__form"
+      data-cabinet-form="recovery" {if $widget !='recovery'} style="display: none; opacity: 0;"{/if}>
+    <div class="text-center mb-4">
+        <div class="fs-3">{'cabinet_auth_recovery' | lexicon}</div>
+        <span>{'cabinet_auth_recovery_login_signup' | lexicon}</span>
+    </div>
+    <div class="mb-3">
+        {if $_modx->config.cabinet_auth_mode == 'phone'}
+            <label for="cabinet-auth-recovery-username">{'cabinet_auth_recovery_phone' | lexicon}</label>
+        {else}
+            <label for="cabinet-auth-recovery-username">{'cabinet_auth_recovery_username' | lexicon}</label>
+        {/if}
+        <input id="cabinet-auth-recovery-username" type="text" name="username" data-cabinet-availability
+               class="form-control" required/>
+        <div data-cabinet-feedback></div>
+        <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_recovery_username_desc' | lexicon}</small>
+    </div>
+    <div data-cabinet-message>{$recoveryMessage}</div>
+    {if $useYaSmartCaptcha?}
+        <div class="smart-captcha mb-3" id="smart-captcha-auth-recovery"></div>
+    {/if}
+    <button type="submit" class="btn btn-primary w-100">{'cabinet_auth_recovery_btn' | lexicon}</button>
+</form>
+<form action="auth/signup" class="cabinet__form"
+      data-cabinet-form="signup" {if $widget !='signup'} style="display: none; opacity: 0;"{/if}>
+    <div class="text-center mb-4">
+        <div class="fs-3">{'cabinet_auth_signup' | lexicon}</div>
+        <span>{'cabinet_auth_signup_have_account' | lexicon}</span>
+    </div>
+
+    <div class="mb-3">
+        <label for="cabinet-auth-signup-email">{'cabinet_auth_signup_email' | lexicon}</label>
+        <input id="cabinet-auth-signup-email" type="email" name="email" data-cabinet-availability class="form-control"
+               {if $_modx->config.cabinet_auth_mode == 'email'}required{/if} />
+        <div data-cabinet-feedback></div>
+        <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_signup_email_desc' | lexicon}</small>
+    </div>
+    <div class="mb-3">
+        <label for="cabinet-auth-signup-phone">{'cabinet_auth_signup_phone' | lexicon}</label>
+        <input id="cabinet-auth-signup-phone" type="tel" name="phone"
+               {ignore}data-cabinet-mask="+{7}(000)000-00-00"{/ignore} data-cabinet-availability class="form-control"
+                {if $_modx->config.cabinet_auth_mode == 'phone'}required{/if} />
+        <div data-cabinet-feedback></div>
+        <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_signup_phone_desc' | lexicon}</small>
+    </div>
+    <div class="mb-3">
+        <label for="cabinet-auth-signup-password">{'cabinet_auth_signup_password' | lexicon}</label>
+        <div class="cabinet__password-field password-field">
+            <input id="cabinet-auth-signup-password" type="password" name="password" data-cabinet-password-strength
+                   data-cabinet-availability class="form-control"
+                   {if !$_modx->config.cabinet_auth_activation}required{/if} />
+            <button type="button" class="password-field__toggle" data-cabinet-password-toggle></button>
+        </div>
+        <div id="cabinet-auth-signup-password-strength" class="password-strength" data-strength="0"
+             data-bs-toggle="tooltip" title="{'cabinet_auth_signup_password_stability' | lexicon}"></div>
+        <div data-cabinet-feedback="password"></div>
+        <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_signup_password_desc' | lexicon}</small>
+    </div>
+    <div class="mb-3">
+        <label for="cabinet-auth-signup-username">{'cabinet_auth_signup_username' | lexicon}</label>
+        <input id="cabinet-auth-signup-username" type="text" name="username" data-cabinet-availability
+               class="form-control"/>
+        <div data-cabinet-feedback></div>
+        <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_signup_username_desc' | lexicon}</small>
+    </div>
+    <div class="mb-3">
+        <label for="cabinet-auth-signup-fullname">{'cabinet_auth_signup_fullname' | lexicon}</label>
+        <input id="cabinet-auth-signup-fullname" type="text" name="fullname" class="form-control"/>
+        <div data-cabinet-feedback></div>
+        <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_signup_fullname_desc' | lexicon}</small>
+    </div>
+    <div data-cabinet-message>{$signupMessage}</div>
+    {if $useYaSmartCaptcha?}
+        <div class="smart-captcha mb-3" id="smart-captcha-auth-signup"></div>
+    {/if}
+    <button type="submit" class="btn btn-primary w-100">{'cabinet_auth_signup_btn' | lexicon}</button>
+
+    {if $socials && $_modx->config.cabinet_social_signup}
+        <div class="mt-4">
+            <div class="text-center text-secondary">{'cabinet_auth_signup_social' | lexicon}</div>
+            <div class="cabinet__auth-socials socials socials--center d-flex justify-content-center gap-3 mt-3">
+                {foreach $socials as $key => $social}
+                    <div class="socials__item cabinet-shadow-hover rounded">
+                        <a class="socials__link" href="{$social.login_url}">
+                            <img class="socials__icon" src="/assets/components/cabinet/images/social/{$key}.svg"
+                                 title="{$social.title}">
+                        </a>
+                    </div>
+                {/foreach}
+            </div>
+            <small class="text-muted lh-sm d-block mt-1">{'cabinet_auth_signup_social_desc' | lexicon}</small>
+        </div>
+    {/if}
+</form>
+<form action="auth/confirm" class="cabinet__form"
+      data-cabinet-form="confirm" {if $widget !='confirm'} style="display: none; opacity: 0;"{/if}>
+    <div>
+        <a href="#" class="link-secondary" data-cabinet-auth-back>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                 class="lucide lucide-arrow-left" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 19-7-7 7-7"/>
+                <path d="M19 12H5"/>
+            </svg>
+        </a>
+    </div>
+    <div class="text-center mb-4">
+        <div class="fs-3">{'cabinet_auth_confirm' | lexicon}</div>
+    </div>
+    {if $_modx->config.cabinet_auth_mode == 'phone'}
+        <input data-cabinet-otp-code type="hidden" name="phone_code">
+        <div class="mb-3">
+            <div class="cabinet__otp otp">
+                <div class="otp__timer mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="lucide lucide-clock-3">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16.5 12"/>
+                    </svg>
+                    <div class="otp__time" data-cabinet-otp-time>00:00</div>
+                </div>
+                <div class="otp__box">
+                    {for $i =1 to=$_modx->config.cabinet_otp_phone_code_length index=$index}
+                        <input class="otp__input form-control" type="text" data-cabinet-otp pattern="\d" maxlength="1"
+                               {if $index?}disabled{/if} required>
+                    {/for}
+                </div>
+            </div>
+            <div data-cabinet-feedback></div>
+            <div class="text-center mt-2 mb-3">
+                <small class="text-muted lh-sm d-block">{'cabinet_auth_confirm_resend_code' | lexicon}</small>
+            </div>
+        </div>
+        <div data-cabinet-message>{$confirmMessage}</div>
+        {if $useYaSmartCaptcha?}
+            <div class="smart-captcha mb-3" id="smart-captcha-auth-confirm"></div>
+        {/if}
+        <button type="submit" class="btn btn-primary w-100">{'cabinet_auth_confirm_btn' | lexicon}</button>
+    {else}
+        <div data-cabinet-message>{$confirmMessage}</div>
+    {/if}
+</form>
