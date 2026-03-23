@@ -1,0 +1,193 @@
+:root {
+    --primary-yellow: #fdd340;
+    --primary-yellow-dark: #e6b800;
+    --accent-green: #4a7c44;
+    --accent-green-light: #f1f8e9;
+    --bg-body: #fdfaf0;
+    --text-main: #222222;
+    --text-muted: #888888;
+    --white: #ffffff;
+    --radius-lg: 0;
+    --radius-md: 0;
+    --shadow-soft: 0 10px 40px rgba(0,0,0,0.04);
+    --shadow-hover: 0 20px 50px rgba(255, 204, 0, 0.2);
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+    font-family: 'Comfortaa', sans-serif;
+    background-color: var(--bg-body);
+    margin: 0;
+    display: flex;
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in { animation: slideUp 0.6s var(--transition) forwards; }
+
+/* Sidebar UI */
+.sidebar {
+    width: 300px;
+    background: var(--white);
+    border-right: 1px solid rgba(0,0,0,0.05);
+    padding: 40px 25px;
+    position: fixed;
+    height: 100vh;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    font-weight: 900;
+    font-size: 28px;
+    margin-bottom: 50px;
+    color: var(--text-main);
+    letter-spacing: -1.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-menu { flex-grow: 1; }
+
+.nav-link {
+    padding: 18px 22px;
+    margin-bottom: 10px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 15px;
+    transition: var(--transition);
+    color: var(--text-muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-link:hover {
+    background: #fcfcfc;
+    color: var(--text-main);
+    transform: translateX(8px);
+}
+
+.nav-link.active {
+    background-color: var(--primary-yellow);
+    color: var(--text-main);
+    box-shadow: 0 10px 25px rgba(255, 204, 0, 0.3);
+}
+
+/* Base Components */
+.main-content {
+    margin-left: 300px;
+    padding: 60px 80px;
+    width: calc(100% - 300px);
+}
+
+.section-card {
+    background: var(--white);
+    padding: 45px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 40px;
+    border-bottom: 8px solid var(--primary-yellow);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.section-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+}
+
+.h1 { font-size: 42px; font-weight: 900; margin-bottom: 40px; letter-spacing: -2px; }
+.h2 { font-size: 24px; font-weight: 900; margin-bottom: 25px; }
+
+/* Buttons */
+.btn-main {
+    background: var(--primary-yellow);
+    border: none;
+    padding: 22px 35px;
+    border-radius: 0;
+    font-weight: 900;
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--transition);
+    width: 100%;
+    color: var(--text-main);
+}
+
+.btn-main:hover {
+    background: var(--primary-yellow-dark);
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Auth Specific UI */
+.auth-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-box {
+    width: 480px;
+    background: var(--white);
+    border-radius: 0;
+    padding: 60px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+/* Responsive Table */
+.table-ui { width: 100%; border-collapse: collapse; }
+.table-ui th { text-align: left; padding: 20px; color: var(--text-muted); font-size: 12px; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #f5f5f5; }
+.table-ui td { padding: 25px 20px; border-bottom: 1px solid #fcfcfc; font-weight: 700; font-size: 15px; }
+
+        /* Таблица заказов */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; border-bottom: 2px solid #eee; color: #aaa; text-transform: uppercase; font-size: 12px; }
+        td { padding: 20px 15px; border-bottom: 1px solid #f9f9f9; font-weight: bold; font-size: 14px; }
+        .status { background: #f1f8e9; color: #2e7d32; padding: 6px 12px; border-radius: 20px; font-size: 12px; }
+        
+        /* Форма данных */
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-weight: bold; margin-bottom: 10px; color: #888; font-size: 13px; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #f0f0f0; font-size: 16px; font-weight: bold; box-sizing: border-box; }
+        .btn { background: #ffcc00; border: none; padding: 18px 30px; border-radius: 15px; font-weight: 900; cursor: pointer; font-size: 16px; width: 100%; }
+        
+        /* Бейджи QR */
+        .qr-placeholder { width: 100px; height: 100px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; text-align: center; font-size: 10px; color: #aaa; }
+                /* Талоны и билеты */
+        .ticket-card { border: 2px dashed #ddd; border-radius: 15px; padding: 20px; display: flex; align-items: center; gap: 20px; margin-bottom: 20px; background: #fafafa; }
+        .qr-mock { width: 80px; height: 80px; background: #333; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 900; }
+        /* Блок безопасности */
+        .info-msg { background: #fff9e6; border-left: 5px solid #ffcc00; padding: 20px; border-radius: 10px; margin-bottom: 30px; font-weight: bold; font-size: 14px; }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-weight: bold; margin-bottom: 10px; color: #888; font-size: 13px; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #f0f0f0; font-size: 16px; font-weight: bold; box-sizing: border-box; }
+        .btn { background: #ffcc00; border: none; padding: 18px 30px; border-radius: 15px; font-weight: 900; cursor: pointer; font-size: 16px; width: 100%; }
+@media (max-width: 1024px) {
+    .sidebar { width: 90px; padding: 30px 10px; align-items: center; }
+    .sidebar .logo, .nav-link span { display: none; }
+    .main-content { margin-left: 90px; width: calc(100% - 90px); padding: 40px; }
+}
+
+@media (max-width: 768px) {
+    body { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #eee; display: flex; flex-direction: row; overflow-x: auto; padding: 15px; }
+    .main-content { margin-left: 0; width: 100%; padding: 25px; }
+}

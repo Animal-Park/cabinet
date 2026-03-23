@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { margin: 0; padding: 0; background-color: #fdfaf0; font-family: sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; color: #222; }
+        .auth-container { width: 450px; background: white; border-radius: 30px; padding: 50px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); text-align: center; border-bottom: 8px solid #ffcc00; }
+        .logo { font-size: 28px; font-weight: 900; margin-bottom: 10px; letter-spacing: -1px; }
+        .subtitle { color: #888; font-size: 14px; margin-bottom: 40px; font-weight: bold; }
+        .tabs { display: flex; background: #f9f9f9; border-radius: 15px; padding: 5px; margin-bottom: 35px; }
+        .tab { flex: 1; padding: 12px; font-weight: 900; font-size: 13px; cursor: pointer; border-radius: 12px; transition: 0.2s; color: #aaa; }
+        .tab.active { background: #ffcc00; color: #222; }
+        .form-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #888; font-size: 12px; text-transform: uppercase; }
+        input { width: 100%; padding: 16px; border-radius: 15px; border: 2px solid #f0f0f0; font-size: 15px; font-weight: bold; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        input:focus { border-color: #ffcc00; }
+        .btn { background: #ffcc00; border: none; padding: 20px; border-radius: 15px; font-weight: 900; cursor: pointer; font-size: 16px; width: 100%; margin-top: 10px; box-shadow: 0 10px 20px rgba(255, 204, 0, 0.2); }
+        .links { margin-top: 25px; font-size: 13px; font-weight: bold; }
+        .links a { color: #4a7c44; text-decoration: none; }
+        .divider { margin: 30px 0; border-top: 1px solid #eee; position: relative; }
+        .divider span { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: white; padding: 0 15px; color: #ccc; font-size: 12px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="logo">ANIMAL PARK</div>
+        <div class="subtitle">Личный кабинет посетителя</div>
+        
+        <div class="tabs">
+            <div class="tab active">Вход</div>
+            <div class="tab">Регистрация</div>
+        </div>
+
+        <form>
+            <div class="form-group">
+                <label>E-mail или Телефон</label>
+                <input type="text" placeholder="username@mail.com">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" placeholder="••••••••">
+            </div>
+            
+            <div style="text-align: right; margin-bottom: 20px;">
+                <a href="#" style="color: #888; font-size: 12px; text-decoration: none; font-weight: bold;">Забыли пароль?</a>
+            </div>
+
+            <button type="button" class="btn">Войти в кабинет</button>
+        </form>
+
+        <div class="divider"><span>ИЛИ</span></div>
+
+        <div class="links">
+            Нет аккаунта? <a href="#">Зарегистрироваться сейчас</a>
+        </div>
+    </div>
+</body>
+</html>
