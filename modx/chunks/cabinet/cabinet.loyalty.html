@@ -1,0 +1,74 @@
+<!-- cabinet.loyalty — Страница программы лояльности -->
+<div class="fade-in">
+    <h1 class="h1">Программа лояльности</h1>
+
+    <div class="section-card" style="padding: 50px;">
+        <div class="loyalty-hero">
+            <div style="font-weight: 800; text-transform: uppercase; opacity: 0.7; font-size: 13px;">Доступно для списания</div>
+            <div class="bonus-val">[[+loyalty.points:default=`0`]] БАЛЛОВ</div>
+            <div class="equivalent">≈ [[+loyalty.equivalent:default=`0.00`]] BYN</div>
+            <div class="progress-bg">
+                <div class="progress-bar" style="width: [[+loyalty.progress:default=`0`]]%;"></div>
+            </div>
+            <div style="font-weight: 900;">Ваш статус: «[[+loyalty.tier_name:default=`Новичок`]]»</div>
+            <div style="font-size: 13px; margin-top: 5px;">[[+loyalty.next_tier_message]]</div>
+        </div>
+    </div>
+
+    <!-- Уровни и привилегии -->
+    <div class="section-card">
+        <div class="h2">Уровни и привилегии</div>
+        <div class="tier-grid">
+            <div class="tier-card [[+loyalty.tier:is=`beginner`:then=`current`]]">
+                <div>
+                    <div class="tier-name">Новичок</div>
+                    <div class="tier-rate">Кэшбэк: 3% баллами</div>
+                </div>
+                <div class="tier-perks">
+                    • Начисление баллов за билеты<br>
+                    • Начисление за покупку корма
+                </div>
+                [[+loyalty.tier:is=`beginner`:then=`<div style="font-size: 11px; color: var(--accent-green); margin-top: 10px; font-weight: 900; text-transform: uppercase;">Текущий статус</div>`]]
+            </div>
+            <div class="tier-card [[+loyalty.tier:is=`friend`:then=`current`]]">
+                <div>
+                    <div class="tier-name">Друг</div>
+                    <div class="tier-rate">Кэшбэк: 7% баллами</div>
+                </div>
+                <div class="tier-perks">
+                    • Все бонусы Новичка<br>
+                    • 1 бесплатный стакан чая в месяц<br>
+                    • Доступ к закрытым кормлениям
+                </div>
+                [[+loyalty.tier:is=`friend`:then=`<div style="font-size: 11px; color: var(--accent-green); margin-top: 10px; font-weight: 900; text-transform: uppercase;">Текущий статус</div>`]]
+            </div>
+            <div class="tier-card [[+loyalty.tier:is=`patron`:then=`current`]]">
+                <div>
+                    <div class="tier-name">Опекун</div>
+                    <div class="tier-rate">Кэшбэк: 12% баллами</div>
+                </div>
+                <div class="tier-perks">
+                    • Все бонусы Друга<br>
+                    • Бесплатный вход в День рождения<br>
+                    • Скидка 50% на сеанс с Капибарой
+                </div>
+                [[+loyalty.tier:is=`patron`:then=`<div style="font-size: 11px; color: var(--accent-green); margin-top: 10px; font-weight: 900; text-transform: uppercase;">Текущий статус</div>`]]
+            </div>
+        </div>
+    </div>
+
+    <!-- Как это работает -->
+    <div class="section-card">
+        <div class="h2">Как это работает?</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="background: #f9f9f9; padding: 20px; border-radius: 15px;">
+                <div style="font-weight: 900; margin-bottom: 10px;">Накопление</div>
+                <div style="font-size: 14px; color: #666;">Просто покупайте билеты и услуги. Баллы начисляются автоматически согласно вашему статусу. 1 балл = 0.01 BYN.</div>
+            </div>
+            <div style="background: #f9f9f9; padding: 20px; border-radius: 15px;">
+                <div style="font-weight: 900; margin-bottom: 10px;">Списание</div>
+                <div style="font-size: 14px; color: #666;">Оплачивайте баллами до 50% стоимости билетов или полностью покупайте на них корм для животных прямо в кассе.</div>
+            </div>
+        </div>
+    </div>
+</div>

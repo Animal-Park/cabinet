@@ -1,0 +1,31 @@
+<!--
+    Вызов сниппета cabinetProfile
+    Форма редактирования профиля пользователя.
+    Размещается в шаблоне tpl.cabinet.profile.
+-->
+
+[[!cabinetProfile?
+    &allowedFields=`username:50,email:50,fullname:50,phone:12,mobilephone:12,dob:10,address,specifiedpassword,confirmpassword`
+    &requiredFields=`username,email`
+    &tpl=`cabinet.profile`
+    &tplWrapper=`cabinet.profile.wrapper`
+    &tplMessageWrapper=`cabinet.message.wrapper`
+    &avatarPath=`images/avatar/`
+    &avatar=`{"w":200,"h":200,"zc":0,"bg":"ffffff","f":"jpg"}`
+    &css=``
+    &js=`[[++assets_url]]components/cabinet/js/web/profile.js`
+]]
+
+<!--
+    Параметры:
+    &allowedFields      — Разрешённые поля (через запятую, длина через двоеточие)
+    &requiredFields     — Обязательные поля
+    &avatar             — JSON параметры phpThumb для аватара
+    &avatarPath         — Папка для аватаров внутри assets/
+    &gravatarUrl        — URL Gravatar
+    &tpl                — Чанк формы (cabinet.profile)
+    &tplWrapper         — Обёртка (cabinet.profile.wrapper)
+    &tplMessageWrapper  — Обёртка сообщений
+    &css                — CSS (пустой = не грузить дефолтный)
+    &js                 — JS (profile.js из Cabinet)
+-->

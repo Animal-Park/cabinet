@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    [[$head]]
+    <title>Вход в кабинет | Animal Park</title>
+</head>
+<body class="auth-body">
+
+    [[!cabinetAuth?
+        &tpl=`cabinet.auth`
+        &tplWrapper=``
+        &tplMessageWrapper=`cabinet.message.wrapper`
+        &css=``
+        &js=`[[++assets_url]]components/cabinet/js/web/auth.js`
+    ]]
+
+    <script src="[[++assets_url]]js/cabinet-app.js"></script>
+</body>
+</html>
