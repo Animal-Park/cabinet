@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    [[$ap.head]]
+</head>
+<body>
+    [[!apCheckAuth]]
+    [[$ap.sidebar]]
+
+    <div class="ap-main">
+        <div class="ap-animate">
+            <h1 class="ap-page-title">История заказов</h1>
+
+            [[!cabinetOrders?
+                &limit=`12`
+                &sortby=`createdon`
+                &sortdir=`DESC`
+                &tpl=`cabinet.orders`
+                &tplMessageWrapper=`cabinet.message.wrapper`
+                &css=``
+                &js=`{assets_url}components/cabinet/js/web/orders.js`
+            ]]
+        </div>
+    </div>
+
+    [[!cabinetAuth?
+        &tpl=`cabinet.auth`
+        &tplWrapper=`cabinet.auth.wrapper`
+        &tplMessageWrapper=`cabinet.message.wrapper`
+        &css=``
+        &js=`{assets_url}components/cabinet/js/web/auth.js`
+    ]]
+
+    [[$ap.footer]]
+</body>
+</html>

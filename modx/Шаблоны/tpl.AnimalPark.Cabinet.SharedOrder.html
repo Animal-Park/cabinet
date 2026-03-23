@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    [[$ap.head]]
+</head>
+<body>
+
+    <div class="ap-shared-wrapper">
+        <div class="text-center mb-5">
+            <a href="[[~[[++site_start]]]]" class="ap-sidebar__logo" style="display: inline-block;">ANIMAL PARK</a>
+        </div>
+
+        [[!cabinetSharedOrder?
+            &tpl=`cabinet.shared.order`
+            &tplMessageWrapper=`cabinet.message.wrapper`
+            &css=``
+            &js=`{assets_url}components/cabinet/js/web/orders.js`
+        ]]
+    </div>
+
+    [[$ap.footer]]
+</body>
+</html>

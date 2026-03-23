@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    [[$ap.head]]
+</head>
+<body>
+    [[!apCheckAuth]]
+    [[$ap.sidebar]]
+
+    <div class="ap-main">
+        [[$ap.dashboard]]
+    </div>
+
+    [[!cabinetAuth?
+        &tpl=`cabinet.auth`
+        &tplWrapper=`cabinet.auth.wrapper`
+        &tplMessageWrapper=`cabinet.message.wrapper`
+        &css=``
+        &js=`{assets_url}components/cabinet/js/web/auth.js`
+    ]]
+
+    [[$ap.footer]]
+    <script src="[[++assets_url]]components/cabinet/js/web/orders.js"></script>
+</body>
+</html>
