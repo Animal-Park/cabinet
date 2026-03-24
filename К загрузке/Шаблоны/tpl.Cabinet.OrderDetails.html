@@ -7,19 +7,17 @@
     [[$ap.sidebar]]
 
     <div class="main-content">
-        <div class="fade-in">
-            <h1 class="h1">Детали заказа</h1>
-
+        <h1 class="h1">Детали заказа</h1>
+        <div class="section-card">
             [[!cabinetOrderDetails?
                 &tpl=`cabinet.order.details`
                 &tplMessageWrapper=`cabinet.message.wrapper`
                 &css=``
                 &js=`{assets_url}components/cabinet/js/web/orders.js`
             ]]
-
-            <div style="margin-top: 30px;">
-                <a href="[[~485]]" class="btn" style="display:inline-block; width:auto; padding:15px 40px;">← Назад к заказам</a>
-            </div>
+        </div>
+        <div style="margin-top: 20px;">
+            <a href="[[~485]]" class="btn" style="display:inline-block; width:auto; padding:15px 40px; text-decoration:none; color:var(--text-main);">← Назад к заказам</a>
         </div>
     </div>
 
@@ -27,10 +25,10 @@
         &tpl=`cabinet.auth`
         &tplWrapper=`cabinet.auth.wrapper`
         &tplMessageWrapper=`cabinet.message.wrapper`
-        &css=``
+        &css=`{assets_url}components/cabinet/css/web/auth.css`
         &js=`{assets_url}components/cabinet/js/web/auth.js`
     ]]
 
-    [[$ap.footer]]
+    <script src="[[++assets_url]]js/app.js"></script>
 </body>
 </html>

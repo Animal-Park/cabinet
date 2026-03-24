@@ -8,57 +8,48 @@
 
     <div class="main-content">
         <div class="fade-in">
-            <h1 class="h1">История посещений</h1>
+            <h1 class="h1">Программа лояльности</h1>
+            <div class="section-card" style="padding: 50px;">
+                <div style="font-weight: 800; text-transform: uppercase; opacity: 0.6; font-size: 13px; margin-bottom:10px;">Ваш текущий баланс</div>
+                <div style="font-size: 64px; font-weight: 900; margin-bottom: 15px;">[[+extended.loyalty.points:default=`0`]] БАЛЛОВ</div>
+                <div style="background: rgba(255,255,255,0.5); display: inline-block; padding: 8px 20px; border-radius: 12px; font-weight: 900; color: #4a7c44;">≈ [[+extended.loyalty.equivalent:default=`0.00`]] BYN на покупки</div>
+
+                <div style="margin-top: 40px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 14px; margin-bottom: 15px;">
+                        <span>Статус: [[+extended.loyalty.tier_name:default=`Новичок`]]</span>
+                        <span>[[+extended.loyalty.progress:default=`0`]]% до следующего уровня</span>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.1); height: 14px; border-radius: 10px;">
+                        <div style="background: var(--accent-green); width: [[+extended.loyalty.progress:default=`0`]]%; height: 100%; border-radius: 10px; box-shadow: 0 0 20px rgba(74, 124, 68, 0.3);"></div>
+                    </div>
+                </div>
+            </div>
 
             <div class="section-card">
-                <div class="info-msg">Здесь отображается история ваших визитов в Animal Park.</div>
+                <div class="h2">Доступные привилегии</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: var(--accent-green-light); padding: 25px; border-radius: 20px; border-left: 6px solid var(--accent-green);">
+                        <div style="font-weight: 900; margin-bottom: 5px;">Кэшбэк [[+extended.loyalty.cashback:default=`3%`]]</div>
+                        <div style="font-size: 14px; color: #555;">Баллы за каждое посещение.</div>
+                    </div>
+                    <div style="background: var(--accent-green-light); padding: 25px; border-radius: 20px; border-left: 6px solid var(--accent-green);">
+                        <div style="font-weight: 900; margin-bottom: 5px;">Бесплатный чай</div>
+                        <div style="font-size: 14px; color: #555;">В любой зоне отдыха парка.</div>
+                    </div>
+                </div>
+            </div>
 
+            <h1 class="h1">История посещений</h1>
+            <div class="section-card">
                 [[!cabinetOrders?
                     &limit=`20`
                     &sortby=`createdon`
                     &sortdir=`DESC`
-                    &completedStatuses=`2,3`
-                    &tpl=`@INLINE
-                    <div class="visit-card">
-                        <div class="visit-card__date">[[+createdon:date=`%d.%m.%Y`]]</div>
-                        <div class="visit-card__info">
-                            <div class="visit-card__title">Заказ #[[+num]]</div>
-                            <div class="visit-card__desc">[[+status_name]]</div>
-                        </div>
-                        <div class="visit-card__points">[[+cost]] BYN</div>
-                    </div>`
+                    &tpl=`cabinet.orders`
                     &tplMessageWrapper=`cabinet.message.wrapper`
                     &css=``
-                    &js=``
+                    &js=`{assets_url}components/cabinet/js/web/orders.js`
                 ]]
-            </div>
-
-            <div class="section-card">
-                <h2 class="h2">Программа лояльности</h2>
-                <div class="loyalty-hero" style="border-radius: 20px;">
-                    <div style="font-weight: 800; text-transform: uppercase; opacity: 0.6; font-size: 13px; margin-bottom:10px;">Ваш текущий баланс</div>
-                    <div class="loyalty-points">[[+extended.loyalty.points:default=`0`]] БАЛЛОВ</div>
-                    <div class="loyalty-equiv">≈ [[+extended.loyalty.points:default=`0`:divide=`100`:sprintf=`%.2f`]] BYN</div>
-                    <div style="margin-top: 30px;">
-                        <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 14px; margin-bottom: 15px;">
-                            <span>Статус: [[+extended.loyalty.tier_name:default=`Новичок`]]</span>
-                        </div>
-                        <div class="loyalty-progress-bg">
-                            <div class="loyalty-progress-bar" style="width: [[+extended.loyalty.progress:default=`0`]]%;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
-                    <div class="privilege-card">
-                        <div class="privilege-card__title">Кэшбэк [[+extended.loyalty.cashback:default=`3%`]]</div>
-                        <div class="privilege-card__text">Баллы за каждое посещение.</div>
-                    </div>
-                    <div class="privilege-card">
-                        <div class="privilege-card__title">Бесплатный чай</div>
-                        <div class="privilege-card__text">В любой зоне отдыха парка.</div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -67,10 +58,10 @@
         &tpl=`cabinet.auth`
         &tplWrapper=`cabinet.auth.wrapper`
         &tplMessageWrapper=`cabinet.message.wrapper`
-        &css=``
+        &css=`{assets_url}components/cabinet/css/web/auth.css`
         &js=`{assets_url}components/cabinet/js/web/auth.js`
     ]]
 
-    [[$ap.footer]]
+    <script src="[[++assets_url]]js/app.js"></script>
 </body>
 </html>

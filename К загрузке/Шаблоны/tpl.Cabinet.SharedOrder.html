@@ -3,21 +3,20 @@
 <head>
     [[$ap.head]]
 </head>
-<body class="auth-page">
+<body>
+    <div style="max-width: 900px; margin: 60px auto; padding: 0 20px;">
+        <div class="logo" style="text-align: center; margin-bottom: 40px;">ANIMAL PARK</div>
 
-    <div style="max-width: 900px; margin: 60px auto; padding: 0 20px; width: 100%;">
-        <div style="text-align: center; margin-bottom: 40px;">
-            <a href="[[~[[++site_start]]]]" class="logo" style="display: inline-block;">ANIMAL PARK</a>
+        <div class="section-card">
+            [[!cabinetSharedOrder?
+                &tpl=`cabinet.shared.order`
+                &tplMessageWrapper=`cabinet.message.wrapper`
+                &css=``
+                &js=`{assets_url}components/cabinet/js/web/orders.js`
+            ]]
         </div>
-
-        [[!cabinetSharedOrder?
-            &tpl=`cabinet.shared.order`
-            &tplMessageWrapper=`cabinet.message.wrapper`
-            &css=``
-            &js=`{assets_url}components/cabinet/js/web/orders.js`
-        ]]
     </div>
 
-    [[$ap.footer]]
+    <script src="[[++assets_url]]js/app.js"></script>
 </body>
 </html>

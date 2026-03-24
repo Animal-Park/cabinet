@@ -9,13 +9,11 @@
     <div class="main-content">
         <div class="fade-in">
             <h1 class="h1">Обзор аккаунта</h1>
-
             <div class="stats-row">
                 <div class="section-card"><b>[[+extended.loyalty.points:default=`0`]]</b><span>Баллов</span></div>
                 <div class="section-card"><b>[[+extended.loyalty.visits:default=`0`]]</b><span>Визитов</span></div>
-                <div class="section-card"><b>[[+extended.loyalty.cashback:default=`3%`]]</b><span>Кэшбэк</span></div>
+                <div class="section-card"><b>[[+extended.loyalty.cashback:default=`3%`]]</b><span>Скидка</span></div>
             </div>
-
             <div class="section-card">
                 <h2 class="h2">Недавняя активность</h2>
                 [[!cabinetOrders?
@@ -26,28 +24,6 @@
                     &js=``
                 ]]
             </div>
-
-            <div class="section-card">
-                <h2 class="h2">Быстрые действия</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <a href="[[~485]]" class="privilege-card" style="text-decoration:none; color:var(--text-main);">
-                        <div class="privilege-card__title">Мои заказы</div>
-                        <div class="privilege-card__text">История и детали заказов</div>
-                    </a>
-                    <a href="[[~488]]" class="privilege-card" style="text-decoration:none; color:var(--text-main);">
-                        <div class="privilege-card__title">Избранное</div>
-                        <div class="privilege-card__text">Сохранённые товары</div>
-                    </a>
-                    <a href="[[~489]]" class="privilege-card" style="text-decoration:none; color:var(--text-main);">
-                        <div class="privilege-card__title">История посещений</div>
-                        <div class="privilege-card__text">Ваши визиты в парк</div>
-                    </a>
-                    <a href="[[++site_url]]" class="privilege-card" style="text-decoration:none; color:var(--text-main);">
-                        <div class="privilege-card__title">Купить билет</div>
-                        <div class="privilege-card__text">Перейти в каталог</div>
-                    </a>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -55,11 +31,10 @@
         &tpl=`cabinet.auth`
         &tplWrapper=`cabinet.auth.wrapper`
         &tplMessageWrapper=`cabinet.message.wrapper`
-        &css=``
+        &css=`{assets_url}components/cabinet/css/web/auth.css`
         &js=`{assets_url}components/cabinet/js/web/auth.js`
     ]]
 
-    [[$ap.footer]]
-    <script src="[[++assets_url]]components/cabinet/js/web/orders.js"></script>
+    <script src="[[++assets_url]]js/app.js"></script>
 </body>
 </html>
