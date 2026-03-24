@@ -4,12 +4,11 @@
     [[$ap.head]]
 </head>
 <body>
-    [[!apCheckAuth]]
     [[$ap.sidebar]]
 
-    <div class="ap-main">
-        <div class="ap-animate">
-            <h1 class="ap-page-title">История заказов</h1>
+    <div class="main-content">
+        <div class="fade-in">
+            <h1 class="h1">Мои заказы</h1>
 
             [[!cabinetOrders?
                 &limit=`12`
@@ -19,6 +18,16 @@
                 &tplMessageWrapper=`cabinet.message.wrapper`
                 &css=``
                 &js=`{assets_url}components/cabinet/js/web/orders.js`
+            ]]
+
+            [[!cabinetProfile?
+                &tpl=`cabinet.profile`
+                &tplWrapper=`cabinet.profile.wrapper`
+                &tplMessageWrapper=`cabinet.message.wrapper`
+                &allowedFields=`username:50,email:50,fullname:50,phone:12,mobilephone:12,dob:10,address,specifiedpassword,confirmpassword`
+                &requiredFields=`username,email`
+                &css=`{assets_url}components/cabinet/css/web/profile.css`
+                &js=`{assets_url}components/cabinet/js/web/profile.js`
             ]]
         </div>
     </div>

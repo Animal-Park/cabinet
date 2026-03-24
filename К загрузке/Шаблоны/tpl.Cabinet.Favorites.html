@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    [[$ap.head]]
+</head>
+<body>
+    [[$ap.sidebar]]
+
+    <div class="main-content">
+        <div class="fade-in">
+            <h1 class="h1">Избранное</h1>
+
+            <div class="section-card">
+                <div class="info-msg">Здесь отображаются товары и услуги, которые вы добавили в избранное.</div>
+
+                [[!msFavorites?
+                    &tpl=`@INLINE
+                    <div class="ticket-card">
+                        <div style="width:80px; height:80px; border-radius:10px; overflow:hidden; flex-shrink:0;">
+                            <img src="[[+thumb]]" alt="[[+pagetitle]]" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-size:18px; font-weight:900;">
+                                <a href="[[~[[+id]]]]" style="color:var(--text-main); text-decoration:none;">[[+pagetitle]]</a>
+                            </div>
+                            <div style="color:#888; font-size:13px; margin-top:4px;">[[+price]] BYN</div>
+                            <div style="margin-top:8px;">
+                                <a href="[[~[[+id]]]]" class="btn" style="width:auto; display:inline-block; padding:10px 20px; font-size:13px;">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>`
+                    &limit=`20`
+                ]]
+            </div>
+        </div>
+    </div>
+
+    [[!cabinetAuth?
+        &tpl=`cabinet.auth`
+        &tplWrapper=`cabinet.auth.wrapper`
+        &tplMessageWrapper=`cabinet.message.wrapper`
+        &css=``
+        &js=`{assets_url}components/cabinet/js/web/auth.js`
+    ]]
+
+    [[$ap.footer]]
+</body>
+</html>
